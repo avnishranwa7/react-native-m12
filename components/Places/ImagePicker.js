@@ -10,7 +10,7 @@ import {
 import { Colors } from "../../constants/colors";
 import OutlinedButton from "../UI/OutlinedButton";
 
-const ImagePicker = () => {
+const ImagePicker = ({ onTakeImage }) => {
   const [cameraPermissionInfo, requestPermission] = useCameraPermissions();
   const [pickedImage, setPickedImage] = useState();
 
@@ -40,6 +40,7 @@ const ImagePicker = () => {
       aspect: [16, 9],
       quality: 0.5,
     });
+    onTakeImage(image.assets[0].uri);
     setPickedImage(image.assets[0].uri);
   }
 

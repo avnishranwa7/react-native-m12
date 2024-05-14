@@ -1,13 +1,21 @@
 import React from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
+// local imports
+import { Colors } from "../../constants/colors";
+
 const PlaceItem = ({ place, onPress }) => {
   return (
-    <Pressable onPress={onPress}>
-      <Image source={{ uri: place.imageUri }} />
-      <View>
-        <Text>{place.title}</Text>
-        <Text>{place.address}</Text>
+    <Pressable
+      onPress={() => onPress(place.id)}
+      style={({ pressed }) => [styles.item, pressed && styles.pressed]}
+    >
+      <View style={styles.imageContainer}>
+        <Image source={{ uri: place.imageUri }} style={styles.image} />
+      </View>
+      <View style={styles.info}>
+        <Text style={styles.title}>{place.title}</Text>
+        <Text style={styles.address}>{place.address}</Text>
       </View>
     </Pressable>
   );
@@ -15,4 +23,42 @@ const PlaceItem = ({ place, onPress }) => {
 
 export default PlaceItem;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  item: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    borderRadius: 6,
+    marginVertical: 12,
+    backgroundColor: Colors.primary500,
+    elevation: 2,
+    shadowColor: "black",
+    shadowOpacity: 0.15,
+    shadowOffset: { width: 1, height: 1 },
+    shadowRadius: 2,
+  },
+  pressed: {
+    opacity: 0.9,
+  },
+  imageContainer: {
+    flex: 1,
+  },
+  image: {
+    flex: 1,
+    borderBottomLeftRadius: 4,
+    borderTopLeftRadius: 4,
+    height: 100,
+  },
+  info: {
+    flex: 2,
+    padding: 12,
+  },
+  title: {
+    fontWeight: "bold",
+    fontSize: 18,
+    color: Colors.gray700,
+  },
+  address: {
+    fontSize: 12,
+    color: Colors.gray700,
+  },
+});

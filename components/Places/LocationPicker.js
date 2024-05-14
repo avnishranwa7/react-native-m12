@@ -10,9 +10,9 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 // local imports
 import { Colors } from "../../constants/colors";
 import OutlinedButton from "../UI/OutlinedButton";
-import { getMapPreview } from "../../util/location";
+import { getAddress, getMapPreview } from "../../util/location";
 
-const LocationPicker = () => {
+const LocationPicker = ({ onPickLocation }) => {
   const [locationPermissionInfo, requestPermission] =
     useForegroundPermissions();
   const { navigate } = useNavigation();
@@ -24,6 +24,20 @@ const LocationPicker = () => {
     if (params)
       setPickedLocation({ lat: params.pickedLat, long: params.pickedLong });
   }, [params]);
+
+  useEffect(() => {
+    async function handleLocation() {
+      if (pickedLocation) {
+        const address = await getAddress(
+          pickedLocation.lat,
+          pickedLocation.long
+        );
+        onPickLocation({ ...pickedLocation, address });
+      }
+    }
+
+    handleLocation();
+  }, [pickedLocation, onPickLocation]);
 
   async function verifyPermission() {
     if (locationPermissionInfo.status === PermissionStatus.UNDETERMINED) {
